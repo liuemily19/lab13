@@ -33,6 +33,10 @@ public class FamilyTree
         {
             // Add childNode to this node's children list. Also
             // set childNode's parent to this node.
+        	if (childNode != null) {
+        		children.add(childNode);
+        		childNode = this;
+        	}
         }
         
         
@@ -191,9 +195,9 @@ public class FamilyTree
 		// Check members of ancestorsOf1 in order until you find a node that is also
 		// an ancestor of 2. 
 		for (TreeNode n1: ancestorsOf1)
-			if (ancestorsOf2.contains(n1))
+			if (ancestorsOf2.contains(n1)) {
 				return n1;
-		
+			}
 		// No common ancestor.
 		return null;
 	}
