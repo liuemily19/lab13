@@ -35,7 +35,7 @@ public class FamilyTree
             // set childNode's parent to this node.
         	if (childNode != null) {
         		children.add(childNode);
-        		childNode = this;
+        		childNode.parent = this;
         	}
         }
         
@@ -45,9 +45,9 @@ public class FamilyTree
         TreeNode getNodeWithName(String targetName)
         {
             // Does this node have the target name?
-            if (name.equals(targetName))
+            if (name.equals(targetName)) {
                 return this;
-                    
+            }  
             // No, recurse. Check all children of this node.
             for (TreeNode child: children)
             {
@@ -94,11 +94,12 @@ public class FamilyTree
         {
             String s = indent + name + "\n";
             indent += "  ";
-            for (TreeNode childNode: children)
+            for (TreeNode childNode: children) {
                 s += childNode.toStringWithIndent(indent);
+            }
             return s;
         }
-    }
+      }
 
 	private TreeNode			root;
 	
@@ -109,15 +110,16 @@ public class FamilyTree
 	public FamilyTree() throws IOException, TreeException
 	{
 		// User chooses input file. This block doesn't need any work.
-		FileNameExtensionFilter filter = 
-			new FileNameExtensionFilter("Family tree text files", "txt");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Family tree text files", "txt");
 		File dirf = new File("data");
-		if (!dirf.exists())
+		if (!dirf.exists()) {
 			dirf = new File(".");
+		}
 		JFileChooser chooser = new JFileChooser(dirf);
 		chooser.setFileFilter(filter);
-		if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
+		if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
 			System.exit(1);
+		}
 		File treeFile = chooser.getSelectedFile();
 
 		// Parse the input file. Create a FileReader that reads treeFile. Create a BufferedReader
@@ -125,8 +127,9 @@ public class FamilyTree
 		FileReader fr = new FileReader(treeFile);
 		BufferedReader br = new BufferedReader(fr);
 		String line;
-		while ((line = br.readLine()) != null)
+		while ((line = br.readLine()) != null) {
 			addLine(line);
+		}
 		br.close();
 		fr.close();
 	}
@@ -146,7 +149,7 @@ public class FamilyTree
 		String parent = line.substring(0, colonIndex);
 		String childrenString = line.substring(colonIndex +1); 
 				                   
-		String[] childrenArray = childrenString.split(",");
+		String[] childrenArray = childrenString.split(",\\s*");
 
 		// Find parent node. If root is null then the tree is empty and the
 		// parent node must be constructed. Otherwise the parent node should be 
@@ -194,10 +197,11 @@ public class FamilyTree
 		
 		// Check members of ancestorsOf1 in order until you find a node that is also
 		// an ancestor of 2. 
-		for (TreeNode n1: ancestorsOf1)
+		for (TreeNode n1: ancestorsOf1) {
 			if (ancestorsOf2.contains(n1)) {
 				return n1;
 			}
+		}
 		// No common ancestor.
 		return null;
 	}
